@@ -74,6 +74,9 @@ const GuideMe = {
     },
 
     async startCamera() {
+
+        if (Speech.allowFirstSpeak) Speech.allowFirstSpeak();
+        
         try {
             await Camera.start();
             this.cameraActive = true;
