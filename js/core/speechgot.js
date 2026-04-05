@@ -20,6 +20,49 @@ const Speech = {
         this.loadAudioFiles();
         return true;
     },
+
+        allowFirstSpeak() {
+        if (this.firstSpeakAllowed) return;
+        this.firstSpeakAllowed = true;
+        console.log('🎤 Аудио разрешено пользователем');
+        // Воспроизводим тихий звук для активации аудиоконтекста
+        const silent = new Audio();
+        silent.volume = 0;
+        silent.play().catch(() => {});
+    },
+
+    play(name) {
+        if (!this.settings.enabled) return;
+        if (!this.isLoaded) {
+            setTimeout(() => this.play(name), 500);
+            return;
+        }
+        if (!this.firstSpeakAllowed) {
+            console.log('⏳ Аудио не разрешено, игнорируем:', name);
+            return;
+        }
+        const audio = this.audioCache[name];
+        if (audio) {
+            audio.volume = this.settings.volume;
+            audio.currentTime = 0;
+            audio.play().catch(e => console.warn(`Ошибка ${name}:`, e));
+        }
+    },
+
+    speak(text) {
+        if (!this.settings.enabled) return;
+        if (!this.isLoaded) {
+            setTimeout(() => this.speak(text), 1000);
+            return;
+        }
+        if (!this.firstSpeakAllowed) {
+            console.log('⏳ Аудио не разрешено, игнорируем speak:', text);
+            return;
+        }
+        const parts = this.splitText(text);
+        parts.forEach(part => this.audioQueue.push(part));
+        this.playQueue();
+    },
     
     loadAudioFiles() {
         // ТОЛЬКО РЕАЛЬНО СУЩЕСТВУЮЩИЕ ФАЙЛЫ (настройте под вашу папку audio/)
