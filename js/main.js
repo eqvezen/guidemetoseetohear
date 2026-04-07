@@ -23,10 +23,7 @@ const GuideMe = {
         if (modelLoaded) console.log('✅ Модель загружена');
 
         this._setupCallbacks();
-// Разрешаем аудио при первом касании экрана
-document.body.addEventListener('click', () => {
-    if (Speech.allowFirstSpeak) Speech.allowFirstSpeak();
-}, { once: true });
+
         // Голосовые команды (если есть)
         if (typeof VoiceCommand !== 'undefined' && VoiceCommand.init) {
             try {
@@ -77,9 +74,6 @@ document.body.addEventListener('click', () => {
     },
 
     async startCamera() {
-
-        if (Speech.allowFirstSpeak) Speech.allowFirstSpeak();
-        
         try {
             await Camera.start();
             this.cameraActive = true;
