@@ -21,11 +21,13 @@ const UISettings = {
         Helpers.saveSettings(settings);
         if (window.Speech) Speech.updateSettings({ volume: settings.volume });
     },
-    togglePanel() {
-        if (this.elements.settingsPanel) {
-            this.panelVisible = !this.panelVisible;
-            this.elements.settingsPanel.classList.toggle('hidden');
+togglePanel() {
+    if (this.elements.settingsPanel) {
+        this.panelVisible = !this.panelVisible;
+        if (this.panelVisible) {
+            this.elements.settingsPanel.classList.remove('hidden');
+        } else {
+            this.elements.settingsPanel.classList.add('hidden');
         }
     }
-};
-window.UISettings = UISettings;
+}
